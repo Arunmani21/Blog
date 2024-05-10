@@ -6,6 +6,12 @@ This is an Express application for a blog platform. Users can create blog posts,
 
 The Express Blog Application allows users to create, view, and interact with blog posts. It includes features such as post creation, browsing posts by category or author, and commenting on posts. Additionally, the application implements authentication and authorization systems to ensure secure access to features.
 
+## Stack Versions
+
+- Node.js: v18.16.0
+- Express.js: v4.19.2
+- MongoDB: v8.3.3
+
 ## Features
 
 - Create blog posts
