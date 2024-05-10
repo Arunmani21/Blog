@@ -2,7 +2,9 @@ const Comment = require("../models/commentModel");
 const HttpError = require("../models/errorModel");
 const Post = require("../models/postModel");
 
-// Create a comment
+//========= Create a Comment for a post
+//POST : api/posts/:posts/comments
+//PROTECTED
 const createComment = async (req, res, next) => {
   try {
     const { commentText } = req.body;
@@ -24,7 +26,9 @@ const createComment = async (req, res, next) => {
   }
 };
 
-// Edit a comment
+//========= Edit a Comment for a post
+//PATCH : api/posts/comments/:id
+//PROTECTED
 const editComment = async (req, res, next) => {
   try {
     const { commentText } = req.body;
@@ -48,14 +52,15 @@ const editComment = async (req, res, next) => {
       { new: true }
     );
 
-    // Return the updated comment
     res.status(200).json(updatedComment);
   } catch (error) {
     return next(new HttpError("Failed to edit comment.", 500));
   }
 };
 
-// Delete a comment
+//========= Delete a Comment for a post
+//DELETE : api/posts/comments/:id
+//PROTECTED
 const deleteComment = async (req, res, next) => {
   try {
     const commentId = req.params.commentId;
