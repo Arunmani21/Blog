@@ -103,9 +103,3 @@ npm start
 ### Frontend
 
 The frontend is built with React and implements a basic user interface to interact with the API. It includes forms for creating and editing blog posts, user registration, and login.
-
-### Deployment
-
-The application is deployed on Vercel. You can access it through the following link:
-
-[Blog Application]()
