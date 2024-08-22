@@ -18,6 +18,6 @@ router.post("/login", loginUser);
 router.get("/:id", getUser);
 router.post("/change", authMiddleWare, changeAvatar);
 router.get("/", getAuthors);
-router.patch("/edit-user", authMiddleWare, editUser);
+router.put("/edit-user", authMiddleWare, editUser);
 
 module.exports = router;

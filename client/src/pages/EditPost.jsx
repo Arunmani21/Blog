@@ -90,7 +90,7 @@ const EditPost = () => {
     postData.set("thumbnail", thumbnail);
 
     try {
-      const response = await axios.patch(
+      const response = await axios.put(
         `${process.env.REACT_APP_BASE_URL}/posts/${id}`,
         postData,
         { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }

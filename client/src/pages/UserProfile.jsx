@@ -70,7 +70,7 @@ const UserProfile = () => {
       userData.set("newPassword", newPassword);
       userData.set("confirmNewPassword", confirmNewPassword);
 
-      const response = await axios.patch(
+      const response = await axios.put(
         `${process.env.REACT_APP_BASE_URL}/users/edit-user`,
         userData,
         { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }

@@ -15,7 +15,7 @@ const router = Router();
 router.post("/", authMiddleWare, createPost);
 router.get("/", getPosts);
 router.get("/:id", getPost);
-router.patch("/:id", authMiddleWare, editPost);
+router.put("/:id", authMiddleWare, editPost);
 router.get("/categories/:category", getCatPosts);
 router.get("/users/:id", getUserPosts);
 router.delete("/:id", authMiddleWare, deletePost);
