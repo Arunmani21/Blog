@@ -10,7 +10,6 @@ This application is a blog platform that allows users to create, read, update, a
 - [Running the Application](#running-the-application)
 - [API Endpoints](#api-endpoints)
 - [Frontend](#frontend)
-- [Deployment](#deployment)
 
 ### Features
 
