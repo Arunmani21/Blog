@@ -17,7 +17,7 @@ const commentSchema = new Schema(
       required: true,
     },
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
 module.exports = model("Comment", commentSchema);

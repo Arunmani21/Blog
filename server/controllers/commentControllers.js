@@ -11,14 +11,21 @@ const createComment = async (req, res, next) => {
     const postId = req.params.id;
     const commenter = req.user.id;
 
+    // Create the comment
     const newComment = await Comment.create({
       postId,
       commenter,
       commentText,
     });
+
+    // Populate the commenter's name before returning the response
+    await newComment.populate("commenter", "name");
+
+    // Add the comment to the post's comments array
     await Post.findByIdAndUpdate(postId, {
       $push: { comments: newComment._id },
     });
+
     res.status(201).json(newComment);
   } catch (error) {
     console.log(error);
@@ -46,13 +53,11 @@ const editComment = async (req, res, next) => {
       );
     }
 
-    const updatedComment = await Comment.findByIdAndUpdate(
-      commentId,
-      { commentText },
-      { new: true }
-    );
+    // Update the comment text
+    comment.commentText = commentText;
+    await comment.save();
 
-    res.status(200).json(updatedComment);
+    res.status(200).json(comment);
   } catch (error) {
     return next(new HttpError("Failed to edit comment.", 500));
   }
@@ -76,6 +81,14 @@ const deleteComment = async (req, res, next) => {
         new HttpError("You are not authorized to delete this comment.", 403)
       );
     }
+
+    // Remove the comment from the post's comments array
+    await Post.findByIdAndUpdate(comment.postId, {
+      $pull: { comments: commentId },
+    });
+
+    // Delete the comment
+    await comment.remove();
 
     res.status(200).json({ message: "Comment deleted successfully." });
   } catch (error) {

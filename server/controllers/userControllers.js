@@ -1,5 +1,9 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
+const { v4: uuid } = require("uuid");
+
 const User = require("../models/userModel");
 const HttpError = require("../models/errorModel");
 
@@ -100,6 +104,63 @@ const getUser = async (req, res, next) => {
   }
 };
 
+// ======== Edit User Avatar
+// POST : api/users/change-avatar
+//PROTECTED
+const changeAvatar = async (req, res, next) => {
+  try {
+    if (!req.files || !req.files.avatar) {
+      return next(new HttpError("Please choose an image", 422));
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return next(new HttpError("User not found", 404));
+    }
+
+    if (user.avatar) {
+      fs.unlink(path.join(__dirname, "..", "uploads", user.avatar), (err) => {
+        if (err) {
+          console.log(err); // Log the error for debugging purposes
+        }
+      });
+    }
+
+    const { avatar } = req.files;
+
+    if (avatar.size > 500000) {
+      return next(
+        new HttpError("Profile picture too big. Should be less than 500KB", 422)
+      );
+    }
+
+    const fileNameParts = avatar.name.split(".");
+    const newFileName =
+      fileNameParts[0] + uuid() + "." + fileNameParts[fileNameParts.length - 1];
+
+    const uploadPath = path.join(__dirname, "..", "uploads", newFileName);
+
+    // Move the file using a Promise-based approach
+    await avatar.mv(uploadPath);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { avatar: newFileName },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return next(new HttpError("Avatar couldn't be changed", 422));
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    return next(
+      new HttpError("Something went wrong, please try again later", 500)
+    );
+  }
+};
+
 // ======== Edit User details
 // POST : api/users/edit-user
 //PROTECTED
@@ -162,4 +223,11 @@ const getAuthors = async (req, res, next) => {
   }
 };
 
-module.exports = { registerUser, loginUser, getUser, editUser, getAuthors };
+module.exports = {
+  registerUser,
+  loginUser,
+  getUser,
+  changeAvatar,
+  editUser,
+  getAuthors,
+};
